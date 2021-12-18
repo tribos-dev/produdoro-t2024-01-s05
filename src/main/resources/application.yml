@@ -7,4 +7,8 @@ spring:
     mongodb:
       authentication-database: admin
       uri: ${MONGO_DB_URI:mongodb+srv://produdoroDevUser:8iN1yCBRKXMRZa1A@cluster0.bbnoj.mongodb.net/produdoroDevDB?retryWrites=true&w=majority}
-      auto-index-creation: true
+      auto-index-creation: true      
+
+springdoc:
+  swagger-ui:
+    path: /swagger
