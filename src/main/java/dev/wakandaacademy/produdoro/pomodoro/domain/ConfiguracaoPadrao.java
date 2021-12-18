@@ -1,4 +1,4 @@
-package dev.wakandaacademy.produdoro.pomodo.domain;
+package dev.wakandaacademy.produdoro.pomodoro.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.FieldType;

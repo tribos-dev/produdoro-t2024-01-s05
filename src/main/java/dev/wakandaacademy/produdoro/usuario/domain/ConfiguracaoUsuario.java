@@ -1,6 +1,6 @@
 package dev.wakandaacademy.produdoro.usuario.domain;
 
-import dev.wakandaacademy.produdoro.pomodo.domain.ConfiguracaoPadrao;
+import dev.wakandaacademy.produdoro.pomodoro.domain.ConfiguracaoPadrao;
 import lombok.Getter;
 
 @Getter
