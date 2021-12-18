@@ -11,7 +11,7 @@ public class CrendencialService implements CredencialApplicationService {
 
 	@Override
 	public void criaNovaCredencial(@Valid UsuarioNovoRequest usuarioNovo) {
-		
+		//TODO Implementar metodo para criar nova creencial
 	}
 
 }
