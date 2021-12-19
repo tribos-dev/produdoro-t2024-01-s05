@@ -28,7 +28,7 @@ public class RestResponseEntityExceptionHandler {
 				.body(ErrorApiResponse.builder().description("INTERNAL SERVER ERROR!")
 						.message("POR FAVOR INFORME AO ADMINISTRADOR DO SISTEMA!").build());
 	}
-	
+
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
