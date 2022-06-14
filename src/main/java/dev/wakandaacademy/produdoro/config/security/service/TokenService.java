@@ -19,9 +19,9 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class TokenService {
-    @Value("${mec.jwt.expiracao}")
+    @Value("${produdoro.jwt.expiracao}")
     private String expiracao;
-    @Value("${mec.jwt.chave}")
+    @Value("${produdoro.jwt.chave}")
     private String chave;
 
     public String gerarToken(Authentication authentication) {
