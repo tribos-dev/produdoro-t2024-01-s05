@@ -19,7 +19,7 @@ public class CrendencialService implements CredencialApplicationService {
 	@Override
 	public void criaNovaCredencial(@Valid UsuarioNovoRequest usuarioNovo) {
 		log.info("[start] CrendencialService - criaNovaCredencial");
-		var novaCredencial = new Credencial(usuarioNovo.getSenha(), usuarioNovo.getSenha());
+		var novaCredencial = new Credencial(usuarioNovo.getEmail(), usuarioNovo.getSenha());
 		credencialRepository.salva(novaCredencial);
 		log.info("[finish] CrendencialService - criaNovaCredencial");
 	}

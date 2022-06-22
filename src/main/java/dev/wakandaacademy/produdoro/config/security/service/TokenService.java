@@ -44,7 +44,7 @@ public class TokenService {
 		return token;
     }
 
-    public Optional<String> getId(String token) {
+    public Optional<String> getUsuario(String token) {
         try {
             log.info("[inicio] TokenService - extração do ID do Token");
             var claims = Jwts.parser().setSigningKey(chave).parseClaimsJws(token).getBody();
