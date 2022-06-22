@@ -47,7 +47,7 @@ public class FiltroToken extends OncePerRequestFilter {
     }
 
     private Credencial recuperaUsuario(String token) {
-        var usuario = tokenService.getId(token).orElseThrow(()-> APIException.build(HttpStatus.FORBIDDEN,"O Token enviado está inválido. Tente novamente."));
+        var usuario = tokenService.getUsuario(token).orElseThrow(()-> APIException.build(HttpStatus.FORBIDDEN,"O Token enviado está inválido. Tente novamente."));
         return credencialService.buscaCredencialPorUsuario(usuario);
     }
 

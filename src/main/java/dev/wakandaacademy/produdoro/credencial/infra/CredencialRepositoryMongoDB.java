@@ -26,7 +26,7 @@ public class CredencialRepositoryMongoDB implements CredencialRepository {
 	@Override
 	public Credencial buscaCredencialPorUsuario(String usuario) {
 		log.info("[start] CredencialRepositoryMongoDB - buscaCredencialPorUsuario");
-		var credencial = credencialMongoRepository.findById(usuario)
+		var credencial = credencialMongoRepository.findByUsuario(usuario)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Não existe credencial para o Usuario informado!"));
 		log.info("[start] CredencialRepositoryMongoDB - buscaCredencialPorUsuario");
 		return credencial;

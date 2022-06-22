@@ -32,7 +32,8 @@ public class Credencial implements UserDetails {
 
 	public Credencial(String usuario, @NotNull String senha) {
 		this.usuario = usuario;
-		this.senha = senha;
+		var encriptador = new BCryptPasswordEncoder();
+		this.senha = encriptador.encode(senha);
 		this.validado = true;
 	}
 

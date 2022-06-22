@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "84058e1e-650f-48ba-a45b-488de8dc9caa",
+		"name": "Produdoro",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2565843"
+	},
+	"item": [
+		{
+			"name": "Create usuário",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"usuario@gmail.com\",\n  \"senha\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/produdoro/api/public/v1/usuario",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"produdoro",
+						"api",
+						"public",
+						"v1",
+						"usuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Autentica",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "*/*"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"usuario\": \"usuario@gmail.com\",\n  \"senha\": \"123456\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/produdoro/api/public/v1/autenticacao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"produdoro",
+						"api",
+						"public",
+						"v1",
+						"autenticacao"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
