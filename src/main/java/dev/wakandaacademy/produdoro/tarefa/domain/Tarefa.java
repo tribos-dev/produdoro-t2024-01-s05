@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 public class Tarefa {
 	@Id
 	private UUID idTarefa;
-	private String nome;
 	private String descricao;
 	@Indexed
 	private UUID idUsuario;
