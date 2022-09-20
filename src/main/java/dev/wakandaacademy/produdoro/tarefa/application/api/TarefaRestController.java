@@ -14,7 +14,7 @@ public class TarefaRestController implements TarefaAPI {
 
     public TarefaIdResponse postNovaTarefa(TarefaRequest tarefaRequest) {
         log.info("[inicia]  TarefaRestController - postNovaTarefa  ");
-        TarefaIdResponse tarefaCriada = tarefaService.criaTarefa(tarefaRequest);
+        TarefaIdResponse tarefaCriada = tarefaService.criaNovaTarefa(tarefaRequest);
         log.info("[finaliza]  TarefaRestController - postNovaTarefa");
         return tarefaCriada;
     }
