@@ -10,6 +10,5 @@ import java.util.Optional;
 public interface TarefaService {
 
     TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest);
-
-    List<TarefaListResponse> buscarTarefasPorIdUsuario(Optional<String> idUsuario); 
+    List<TarefaListResponse> buscarTarefasPorIdUsuario(Optional<String> idUsuario);
 }

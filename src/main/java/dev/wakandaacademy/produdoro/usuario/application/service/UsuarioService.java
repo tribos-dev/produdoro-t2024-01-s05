@@ -41,4 +41,11 @@ public class UsuarioService implements UsuarioApplicationService {
 		log.info("[finaliza] UsuarioApplicationService - buscaUsuarioPorId");
 		return new UsuarioCriadoResponse(usuario);
 	}
+
+	public Usuario buscaUsuarioAtravesId(UUID fromString) {
+		log.info("[start] UsuarioService - buscaUsuarioAtravesId");
+		Usuario usuario = usuarioRepository.buscaUsuarioAtravesId(idUsuario);
+		log.info("[finish] UsuarioService - buscaUsuarioAtravesId");
+		return usuario;
+    }
 }
