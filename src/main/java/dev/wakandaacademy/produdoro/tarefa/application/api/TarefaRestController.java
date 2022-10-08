@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @Log4j2
 @RequiredArgsConstructor
@@ -17,5 +20,13 @@ public class TarefaRestController implements TarefaAPI {
         TarefaIdResponse tarefaCriada = tarefaService.criaNovaTarefa(tarefaRequest);
         log.info("[finaliza]  TarefaRestController - postNovaTarefa");
         return tarefaCriada;
+    }
+
+    @Override
+    public List<TarefaListResponse> listaTarefasPorIdUsuario(Optional<String> idUsuario) {
+        log.info("[inicia] TarefaRestController - listaTarefasPorIdUsuario");
+        List<TarefaListResponse> listaTarefas = tarefaService.buscarTarefasPorIdUsuario(idUsuario);
+        log.info("[finaliza] TarefaRestController - listaTarefasPorIdUsuario");
+        return listaTarefas;
     }
 }
