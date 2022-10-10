@@ -21,17 +21,17 @@ public class TarefaApplicationService implements TarefaService {
 
     @Override
     public TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest) {
-        log.info("[start] TarefaSpringMongoDBService - criaNovaTarefa");
+        log.info("[start] TarefaApplicationService - criaNovaTarefa");
         Tarefa tarefaCriada = tarefaRepository.salva(new Tarefa(tarefaRequest));
-        log.info("[finish] TarefaSpringMongoDBService - criaNovaTarefa");
+        log.info("[finish] TarefaApplicationService - criaNovaTarefa");
         return TarefaIdResponse.builder().idTarefa(tarefaCriada.getIdTarefa()).build();
     }
     @Override
     public Tarefa detalhaTarefa(UUID idTarefa) {
-        log.info("[inicia] TarefaService - detalhaTarefa");
+        log.info("[inicia] TarefaApplicationService - detalhaTarefa");
         Tarefa tarefa =
                 tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
-        log.info("[finaliza] TarefaService - detalhaTarefa");
+        log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
         return tarefa;
     }
 }
