@@ -34,6 +34,7 @@ public class UsuarioService implements UsuarioApplicationService {
 		return new UsuarioCriadoResponse(usuario);
 	}
 
+
 	@Override
 	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
 		log.info("[inicia] UsuarioApplicationService - buscaUsuarioPorId");
@@ -41,4 +42,6 @@ public class UsuarioService implements UsuarioApplicationService {
 		log.info("[finaliza] UsuarioApplicationService - buscaUsuarioPorId");
 		return new UsuarioCriadoResponse(usuario);
 	}
+
+
 }
