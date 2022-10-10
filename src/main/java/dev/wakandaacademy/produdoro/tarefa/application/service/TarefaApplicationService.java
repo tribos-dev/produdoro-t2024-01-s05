@@ -18,6 +18,7 @@ import java.util.UUID;
 public class TarefaApplicationService implements TarefaService {
     private final TarefaRepository tarefaRepository;
 
+
     @Override
     public TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest) {
         log.info("[start] TarefaSpringMongoDBService - criaNovaTarefa");
@@ -33,5 +34,4 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaService - detalhaTarefa");
         return tarefa;
     }
-
 }

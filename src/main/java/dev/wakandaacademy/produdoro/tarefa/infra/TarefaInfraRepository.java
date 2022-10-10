@@ -29,7 +29,6 @@ public class TarefaInfraRepository implements TarefaRepository {
         log.info("[finaliza] TarefaInfraRepository - salva");
         return tarefa;
     }
-
     @Override
     public Optional<Tarefa> buscaTarefaPorId(UUID idTarefa) {
         log.info("[start] TarefaRepositoryMongoDB - buscaTarefaPorId");
