@@ -14,7 +14,5 @@ public interface TarefaAPI {
     @ResponseStatus(code = HttpStatus.CREATED)
     TarefaIdResponse postNovaTarefa(@RequestBody @Valid TarefaRequest tarefaRequest);
 
-    @GetMapping
-    @ResponseStatus(code = HttpStatus.OK)
-    List<TarefaListResponse> listaTarefasPorIdUsuario(@RequestParam("idUsuario")Optional<String> idUsuario);
+
 }

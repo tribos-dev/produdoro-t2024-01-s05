@@ -8,5 +8,4 @@ import java.util.UUID;
 public interface TarefaRepository {
 
     Tarefa salva(Tarefa tarefa);
-    List<Tarefa> buscarTarefasPorIdUsuario(UUID idUsuario);
 }

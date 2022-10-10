@@ -22,11 +22,4 @@ public class TarefaRestController implements TarefaAPI {
         return tarefaCriada;
     }
 
-    @Override
-    public List<TarefaListResponse> listaTarefasPorIdUsuario(Optional<String> idUsuario) {
-        log.info("[inicia] TarefaRestController - listaTarefasPorIdUsuario");
-        List<TarefaListResponse> listaTarefas = tarefaService.buscarTarefasPorIdUsuario(idUsuario);
-        log.info("[finaliza] TarefaRestController - listaTarefasPorIdUsuario");
-        return listaTarefas;
-    }
 }
