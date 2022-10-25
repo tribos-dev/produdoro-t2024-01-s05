@@ -7,5 +7,5 @@ import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import java.util.UUID;
 public interface TarefaService {
     TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest);
-    Tarefa detalhaTarefa(UUID idTarefa);
+    Tarefa detalhaTarefa(String usuario, UUID idTarefa);
 }
