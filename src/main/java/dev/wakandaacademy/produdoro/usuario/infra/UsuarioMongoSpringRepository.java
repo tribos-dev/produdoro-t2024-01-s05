@@ -9,4 +9,5 @@ import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 public interface UsuarioMongoSpringRepository extends MongoRepository<Usuario, UUID> {
     Optional<Usuario> findByIdUsuario(UUID idUsuario);
+    Optional<Usuario> findByEmail(String email);
 }
