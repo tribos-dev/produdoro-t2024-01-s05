@@ -21,6 +21,7 @@ public class TarefaInfraRepository implements TarefaRepository {
 
     @Override
     public Tarefa salva(Tarefa tarefa) {
+        log.info("[inicia] TarefaInfraRepository - salva");
         try {
             tarefaSpringMongoDBRepository.save(tarefa);
         } catch (DataIntegrityViolationException e) {
@@ -31,9 +32,9 @@ public class TarefaInfraRepository implements TarefaRepository {
     }
     @Override
     public Optional<Tarefa> buscaTarefaPorId(UUID idTarefa) {
-        log.info("[start] TarefaRepositoryMongoDB - buscaTarefaPorId");
+        log.info("[inicia] TarefaInfraRepository - buscaTarefaPorId");
         Optional<Tarefa> tarefaPorId = tarefaSpringMongoDBRepository.findByIdTarefa(idTarefa);
-        log.info("[finish] TarefaRepositoryMongoDB - buscaTarefaPorId");
+        log.info("[finaliza] TarefaInfraRepository - buscaTarefaPorId");
         return tarefaPorId;
     }
 }

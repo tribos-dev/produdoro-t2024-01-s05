@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import dev.wakandaacademy.produdoro.config.security.service.AutenticacaoSecurityService;
 import dev.wakandaacademy.produdoro.config.security.service.TokenService;
-import dev.wakandaacademy.produdoro.credencial.application.service.CredencialApplicationService;
+import dev.wakandaacademy.produdoro.credencial.application.service.CredencialService;
 import lombok.RequiredArgsConstructor;
 
 @EnableWebSecurity
@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final TokenService tokenService;
-    private final CredencialApplicationService credencialService;
+    private final CredencialService credencialService;
     private final AutenticacaoSecurityService autenticacaoSecurityService;
 
     @Override

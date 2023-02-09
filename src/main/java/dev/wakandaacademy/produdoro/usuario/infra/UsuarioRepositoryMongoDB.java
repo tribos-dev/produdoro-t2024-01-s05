@@ -19,24 +19,27 @@ public class UsuarioRepositoryMongoDB implements UsuarioRepository {
 
 	@Override
 	public Usuario salva(Usuario usuario) {
-		return usuarioMongoRepository.save(usuario);
+		log.info("[inicia] UsuarioRepositoryMongoDB - salva");
+		Usuario novoUsuario = usuarioMongoRepository.save(usuario);
+		log.info("[inicia] UsuarioRepositoryMongoDB - salva");
+		return novoUsuario;
 	}
 
 	@Override
 	public Usuario buscaUsuarioPorId(UUID idUsuario) {
-		log.info("[inicia] UsuarioMongoSpringRepository - buscaUsuarioPorId");
+		log.info("[inicia] UsuarioRepositoryMongoDB - buscaUsuarioPorId");
 		Usuario usuario = usuarioMongoRepository.findByIdUsuario(idUsuario)
 				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Usuario não encontrado!"));
-		log.info("[finaliza] UsuarioMongoSpringRepository - buscaUsuarioPorId");
+		log.info("[finaliza] UsuarioRepositoryMongoDB - buscaUsuarioPorId");
 		return usuario;
 	}
 
 	@Override
 	public Usuario buscaUsuarioPorEmail(String emailUsuario) {
-		log.info("[inicia] UsuarioMongoSpringRepository - buscaUsuarioPorEmail");
+		log.info("[inicia] UsuarioRepositoryMongoDB - buscaUsuarioPorEmail");
 		Usuario usuario = usuarioMongoRepository.findByEmail(emailUsuario)
 				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Usuario não encontrado!"));
-		log.info("[finaliza] UsuarioMongoSpringRepository - buscaUsuarioPorEmail");
+		log.info("[finaliza] UsuarioRepositoryMongoDB - buscaUsuarioPorEmail");
 		return usuario;
 	}
 }
