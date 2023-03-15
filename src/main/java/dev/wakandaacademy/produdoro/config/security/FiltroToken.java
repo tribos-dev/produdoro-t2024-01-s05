@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import dev.wakandaacademy.produdoro.config.security.domain.ValidaConteudoAuthorizationHeader;
 import dev.wakandaacademy.produdoro.config.security.service.TokenService;
-import dev.wakandaacademy.produdoro.credencial.application.service.CredencialApplicationService;
+import dev.wakandaacademy.produdoro.credencial.application.service.CredencialService;
 import dev.wakandaacademy.produdoro.credencial.domain.Credencial;
 import dev.wakandaacademy.produdoro.handler.APIException;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
 public class FiltroToken extends OncePerRequestFilter {
 
     private final TokenService tokenService;
-    private final CredencialApplicationService credencialService;
+    private final CredencialService credencialService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

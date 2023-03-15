@@ -13,15 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CrendencialService implements CredencialApplicationService {
+public class CrendencialApplicationService implements CredencialService {
 	private final CredencialRepository credencialRepository;
 	
 	@Override
 	public void criaNovaCredencial(@Valid UsuarioNovoRequest usuarioNovo) {
-		log.info("[start] CrendencialService - criaNovaCredencial");
+		log.info("[inicia] CrendencialService - criaNovaCredencial");
 		var novaCredencial = new Credencial(usuarioNovo.getEmail(), usuarioNovo.getSenha());
 		credencialRepository.salva(novaCredencial);
-		log.info("[finish] CrendencialService - criaNovaCredencial");
+		log.info("[finaliza] CrendencialService - criaNovaCredencial");
 	}
 	
 	@Override
