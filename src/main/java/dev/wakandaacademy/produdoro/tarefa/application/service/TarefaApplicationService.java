@@ -44,17 +44,10 @@ public class TarefaApplicationService implements TarefaService {
     @Override
     public void ativaTarefa(String usuario, UUID idTarefa) {
         log.info("[inicia] TarefaApplicationService - ativaTarefa");
-
-        // Detalha tarefa validando-a.
         Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
-
-        // Desativa tarefas do usuário.
         tarefaRepository.desativaTarefasId(tarefa.getIdUsuario());
-
-        // Ativa tarefa Id Específico.
-
-        // Salva Tarefa.
-
+        tarefa.ativaTarefa();
+        tarefaRepository.salva(tarefa);
         log.info("[finaliza] TarefaApplicationService - ativaTarefa");
 
 
