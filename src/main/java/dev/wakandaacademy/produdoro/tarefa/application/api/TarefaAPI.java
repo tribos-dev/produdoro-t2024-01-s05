@@ -28,7 +28,7 @@ public interface TarefaAPI {
     		@PathVariable UUID idTarefa);
     
     @GetMapping("/buscaTarefasDoUsuario/{idUsuario}")
-    List<TarefaListReponse> buscaTarefasPorUsuario(@RequestHeader(name = "Authorization",required = true) String token, 
+    List<TarefaListResponse> buscaTarefasPorUsuario(@RequestHeader(name = "Authorization",required = true) String token, 
     		@PathVariable UUID idUsuario); 
 
 }
