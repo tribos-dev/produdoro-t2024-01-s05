@@ -40,4 +40,17 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
         return tarefa;
     }
+
+    @Override
+    public TarefaIdResponse mudaOrdemDeUmaTarefa(String usuario, UUID idTarefa, int linha) {
+        log.info("[inicia] TarefaApplicationService - mudaOrdemDeUmaTarefa");
+        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+        log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+        Tarefa tarefa =
+                tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
+        tarefa.pertenceAoUsuario(usuarioPorEmail);
+        Tarefa tarefaOrdenada = tarefaRepository.mudaOrdemDeUmaTarefa(idTarefa,linha);
+        log.info("[finaliza] TarefaApplicationService - mudaOrdemDeUmaTarefa");
+        return TarefaIdResponse.builder().idTarefa(tarefaOrdenada.getIdTarefa()).build();
+    }
 }

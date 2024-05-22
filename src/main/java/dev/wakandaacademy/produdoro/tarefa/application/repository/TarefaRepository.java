@@ -10,4 +10,6 @@ public interface TarefaRepository {
 
     Tarefa salva(Tarefa tarefa);
     Optional<Tarefa> buscaTarefaPorId(UUID idTarefa);
+
+    Tarefa mudaOrdemDeUmaTarefa( UUID idTarefa, int linha);
 }
