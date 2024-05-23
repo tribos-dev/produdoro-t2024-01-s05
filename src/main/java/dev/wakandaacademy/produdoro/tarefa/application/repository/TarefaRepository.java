@@ -1,5 +1,6 @@
 package dev.wakandaacademy.produdoro.tarefa.application.repository;
 
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaNovaPosicaoRequest;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 
 import java.util.List;
@@ -11,5 +12,8 @@ public interface TarefaRepository {
     Tarefa salva(Tarefa tarefa);
     Optional<Tarefa> buscaTarefaPorId(UUID idTarefa);
 
-    Tarefa mudaOrdemDeUmaTarefa( UUID idTarefa, int linha);
+    void mudaOrdemDeUmaTarefa( Tarefa tarefa,List<Tarefa> tarefas,TarefaNovaPosicaoRequest tarefaNovaPosicaoRequest);
+
+
+    int contarTarefas(UUID idUsuario);
 }
