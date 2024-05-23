@@ -42,7 +42,7 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[inicia] UsuarioController - mudaStatusPausaCurta");
 		log.info("[idUsuario] {}", idUsuario);
 		String usuario = tokenService.getUsuarioByBearerToken(token)
-				.orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
+				.orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é valida."));
 		usuarioAppplicationService.mudaStatusParaPausaCurta(idUsuario, usuario);
 		log.info("[finaliza] UsuarioController - mudaStatusPausaCurta");
 	}
