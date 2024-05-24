@@ -59,4 +59,10 @@ public class Usuario {
 		validaUsuarioPorId(idUsuario);
 		mudaParaPausaLonga();
 	}
+
+	public void pertenceAoUsuario(Usuario usuarioPorEmail) {
+		if(!this.getIdUsuario().equals(usuarioPorEmail.getIdUsuario())){
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário(a) não autorizado(a) para a requisição solicitada.");
+		}
+	}
 }
