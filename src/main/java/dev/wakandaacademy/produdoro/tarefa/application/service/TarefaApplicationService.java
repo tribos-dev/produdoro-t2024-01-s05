@@ -90,6 +90,14 @@ public class TarefaApplicationService implements TarefaService {
 	}
 
 	@Override
+	public void deletaTarefa(String emailUsuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - concluiTarefa");
+		Tarefa tarefa = detalhaTarefa(emailUsuario, idTarefa);
+		tarefaRepository.deletaTarefa(tarefa);
+		log.info("[inicia] TarefaApplicationService - concluiTarefa");
+	}
+
+	@Override
 	public void deletaTodasAsTarefasDoUsuario(String emailUsuario, UUID idUsuario) {
 		log.info("[inicia] TarefaApplicationService - deletaTodasAsTarefasDoUsuario");
 		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
@@ -106,16 +114,16 @@ public class TarefaApplicationService implements TarefaService {
 
 	@Override
 	public void deletaTarefasConcluidas(String usuarioEmail, UUID idUsuario) {
-		log.info("[inicia] TarefaApplicationService - deletaTarefaconcluida");	
+		log.info("[inicia] TarefaApplicationService - deletaTarefaconcluida");
 		usuarioRepository.buscaUsuarioPorId(idUsuario);
 		Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(usuarioEmail);
 		log.info("[usuarioPorEmail] {}", usuario);
 		usuario.validaUsuario(idUsuario);
 		boolean tarefasExcluidas = tarefaRepository.deletaConcluidas(idUsuario, StatusTarefa.CONCLUIDA);
 		log.info("[tarefasExcluidas] {}", tarefasExcluidas);
-		if (!tarefasExcluidas) {          
-            throw APIException.build(HttpStatus.NOT_FOUND, "Usuário não possui nenhuma tarefa concluída!");
-        }
+		if (!tarefasExcluidas) {
+			throw APIException.build(HttpStatus.NOT_FOUND, "Usuário não possui nenhuma tarefa concluída!");
+		}
 		log.info("[finaliza] TarefaApplicationService - deletaTarefaconcluida");
 	}
 }
