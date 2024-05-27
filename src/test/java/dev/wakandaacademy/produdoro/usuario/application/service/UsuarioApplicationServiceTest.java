@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
@@ -72,6 +73,19 @@ class UsuarioApplicationServiceTest {
     }
 
     @Test
+    void deveMudarStatusParaFoco(){
+        //Dado
+        Usuario usuario = DataHelper.createUsuario();
+        //Quando
+        when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+        when(usuarioRepository.buscaUsuarioPorId(any())).thenReturn(usuario);
+        usuarioApplicationService.mudaStatusParaFoco(usuario.getEmail(),usuario.getIdUsuario());
+        //Entao
+        assertEquals(StatusUsuario.FOCO,usuario.getStatus());
+        verify(usuarioRepository,times(1)).buscaUsuarioPorId(usuario.getIdUsuario());
+        verify(usuarioRepository,times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+        verify(usuarioRepository,times(1)).salva(usuario);
+    }
     void deveMudarOStatusParaPausaLonga(){
         // Dado
         Usuario usuario = DataHelper.createUsuario();

@@ -43,6 +43,27 @@ public class UsuarioController implements UsuarioAPI {
 	}
 
 	@Override
+	public void mudaStatusParaFoco(String token, UUID idUsuario) {
+		log.info("[inicia] UsuarioController - mudaStatusParaFoco");
+		log.info("[idUsuario] {}", idUsuario);
+		String usuario = getUsuarioByToken(token);
+		usuarioAppplicationService.mudaStatusParaFoco(usuario,idUsuario);
+		log.info("[finaliza] UsuarioController - mudaStatusParaFoco");
+	}
+
+	private String getUsuarioByToken(String token) {
+		log.debug("[token] {}", token);
+		String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
+		log.info("[usuario] {}", usuario);
+		return usuario;
+	}
+	public void mudaParaPausaLonga(String token, UUID idUsuario) {
+		log.info("[inicia] - UsuarioController - mudaParaPausaLonga");
+		String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
+		usuarioAppplicationService.mudaParaPausaLonga(usuario, idUsuario);
+		log.info("[finaliza] - UsuarioController - mudaParaPausaLonga");
+	}
+
 	public void mudaStatusPausaCurta(String token, UUID idUsuario) {
 		log.info("[inicia] UsuarioController - mudaStatusPausaCurta");
 		log.info("[idUsuario] {}", idUsuario);
@@ -52,12 +73,5 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[finaliza] UsuarioController - mudaStatusPausaCurta");
 	}
 
-		@Override
-		public void mudaParaPausaLonga (String token, UUID idUsuario){
-			log.info("[inicia] - UsuarioController - mudaParaPausaLonga");
-			String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
-			usuarioAppplicationService.mudaParaPausaLonga(usuario, idUsuario);
-			log.info("[finaliza] - UsuarioController - mudaParaPausaLonga");
-		}
-	}
+}
 

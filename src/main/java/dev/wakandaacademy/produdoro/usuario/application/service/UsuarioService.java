@@ -10,5 +10,6 @@ public interface UsuarioService {
     UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario);
 	void mudaStatusParaPausaCurta(UUID idUsuario, String usuarioEmail);
 
+    void mudaStatusParaFoco(String usuario, UUID idUsuario);
     void mudaParaPausaLonga(String usuario, UUID idUsuario);
 }
