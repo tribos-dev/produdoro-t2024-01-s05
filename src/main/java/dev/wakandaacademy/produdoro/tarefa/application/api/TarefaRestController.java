@@ -1,5 +1,6 @@
 package dev.wakandaacademy.produdoro.tarefa.application.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,14 @@ public class TarefaRestController implements TarefaAPI {
 		return new TarefaDetalhadoResponse(tarefa);
 	}
 
+	@Override
+	public void ativaTarefa(String token, UUID idTarefa) {
+		log.info("[inicia] TarefaRestController - ativaTarefa");
+		String usuario = getUsuarioByToken(token);
+		tarefaService.ativaTarefa(usuario, idTarefa);
+		log.info("[finaliza] TarefaRestController - ativaTarefa");
+	}
+
 	private String getUsuarioByToken(String token) {
 		log.debug("[token] {}", token);
 		String usuario = tokenService.getUsuarioByBearerToken(token)
@@ -44,6 +53,21 @@ public class TarefaRestController implements TarefaAPI {
 	}
 
 	@Override
+	public void editaTarefa(String token, UUID idTarefa, EditaTarefaRequest tarefaRequest) {
+		log.info("[inicia] TarefaRestController - editaTarefa");
+		String emailUsuario = getUsuarioByToken(token);
+		tarefaService.editaTarefa(emailUsuario, idTarefa, tarefaRequest);
+		log.info("[finaliza] TarefaRestController - editaTarefa");
+	}
+
+	public List<TarefaListResponse> buscaTarefasPorUsuario(String token, UUID idUsuario) {
+		log.info("[inicia] TarefaRestController - buscaTarefasPorUsuario");
+		String usuario = getUsuarioByToken(token);
+		List<TarefaListResponse> tarefas = tarefaService.buscaTarefasPorUsuario(usuario, idUsuario);
+		log.info("[finaliza] TarefaRestController - buscaTarefasPorUsuario");
+		return tarefas;
+	}
+
 	public void concluiTarefa(String token, UUID idTarefa) {
 		log.info("[inicia] TarefaRestController - concluiTarefa");
 		String email = getUsuarioByToken(token);
@@ -58,6 +82,14 @@ public class TarefaRestController implements TarefaAPI {
 		String usuario = getUsuarioByToken(token);
 		tarefaService.deletaTarefasConcluidas(usuario, idUsuario);
 		log.info("[finaliza] TarefaRestController - deletaTarefasConcluidas");
+	}
+
+	@Override
+	public void deletaTodasAsTarefasDoUsuario(String token, UUID idUsuario) {
+		log.info("[inicia] TarefaRestController - deletaTodasAsTarefasDoUsuario");
+		String emailUsuario = getUsuarioByToken(token);
+		tarefaService.deletaTodasAsTarefasDoUsuario(emailUsuario, idUsuario);
+		log.info("[finaliza] TarefaRestController - deletaTodasAsTarefasDoUsuario");
 	}
 
 }
