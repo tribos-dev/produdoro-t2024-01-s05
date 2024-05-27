@@ -63,7 +63,7 @@ public class TarefaApplicationService implements TarefaService {
 		boolean tarefasExcluidas = tarefaRepository.deletaConcluidas(idUsuario, StatusTarefa.CONCLUIDA);
 		log.info("[tarefasExcluidas] {}", tarefasExcluidas);
 		if (!tarefasExcluidas) {          
-            throw APIException.build(HttpStatus.NOT_FOUND, "Usúario não possui nenhuma tarefa concluída!");
+            throw APIException.build(HttpStatus.NOT_FOUND, "Usuário não possui nenhuma tarefa concluída!");
         }
 		log.info("[finaliza] TarefaApplicationService - deletaTarefaconcluida");
 	}
