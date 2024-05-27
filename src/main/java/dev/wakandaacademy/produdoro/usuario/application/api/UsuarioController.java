@@ -4,6 +4,9 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import dev.wakandaacademy.produdoro.config.security.service.TokenService;
+import dev.wakandaacademy.produdoro.handler.APIException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +32,7 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[finaliza] UsuarioController - postNovoUsuario");
 		return usuarioCriado;
 	}
+
 	@Override
 	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
 		log.info("[inicia] UsuarioController - buscaUsuarioPorId");
@@ -37,6 +41,7 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[finaliza] UsuarioController - buscaUsuarioPorId");
 		return buscaUsuario;
 	}
+
 	@Override
 	public void mudaStatusPausaCurta(String token, UUID idUsuario) {
 		log.info("[inicia] UsuarioController - mudaStatusPausaCurta");
@@ -46,4 +51,13 @@ public class UsuarioController implements UsuarioAPI {
 		usuarioAppplicationService.mudaStatusParaPausaCurta(idUsuario, usuario);
 		log.info("[finaliza] UsuarioController - mudaStatusPausaCurta");
 	}
-}
+
+		@Override
+		public void mudaParaPausaLonga (String token, UUID idUsuario){
+			log.info("[inicia] - UsuarioController - mudaParaPausaLonga");
+			String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
+			usuarioAppplicationService.mudaParaPausaLonga(usuario, idUsuario);
+			log.info("[finaliza] - UsuarioController - mudaParaPausaLonga");
+		}
+	}
+
