@@ -22,7 +22,7 @@ import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 @Builder
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString

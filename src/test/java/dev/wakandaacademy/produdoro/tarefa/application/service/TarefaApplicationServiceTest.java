@@ -135,7 +135,7 @@ class TarefaApplicationServiceTest {
 		 UUID idUsuario = usuario.getIdUsuario();
 		 
 	        // Arrange
-	        when(usuarioRepository.buscaUsuarioPorId(idUsuario)).thenReturn(new Usuario());
+	        when(usuarioRepository.buscaUsuarioPorId(idUsuario)).thenReturn(usuario);
 	        when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(null);
 
 	        // Act & Assert
