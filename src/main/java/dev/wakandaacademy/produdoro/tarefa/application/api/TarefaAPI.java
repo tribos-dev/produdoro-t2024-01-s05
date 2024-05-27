@@ -40,4 +40,10 @@ public interface TarefaAPI {
                        @PathVariable UUID idUsuario);
 
 
+    @PatchMapping("/AtivaTarefa/{idTarefa}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    void ativaTarefa (@RequestHeader(name = "Authorization",required = true) String token,
+                      @PathVariable UUID idTarefa);
+
+
 }

@@ -56,6 +56,14 @@ public class Tarefa {
 		}
 	}
 
+	public void desativaTarefas() {
+		this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
+	}
+
+	public void ativaTarefa() {
+		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
+	}
+
 	public void edita(EditaTarefaRequest tarefaRequest) {
 		this.descricao = tarefaRequest.getDescricao();
 	}
@@ -66,4 +74,3 @@ public class Tarefa {
 	}
 
 }
-

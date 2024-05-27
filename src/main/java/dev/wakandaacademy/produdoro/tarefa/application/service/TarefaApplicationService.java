@@ -39,13 +39,22 @@ public class TarefaApplicationService implements TarefaService {
 	}
 
 	@Override
+	public void ativaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - ativaTarefa");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefaRepository.desativaTarefasId(tarefa.getIdUsuario());
+		tarefa.ativaTarefa();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - ativaTarefa");
+	}
+
+	@Override
 	public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
 		log.info("[inicia] TarefaApplicationService - detalhaTarefa");
 		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
 		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
 		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
 				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
-		tarefa.pertenceAoUsuario(usuarioPorEmail);
 		log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
 		return tarefa;
 	}
@@ -57,7 +66,6 @@ public class TarefaApplicationService implements TarefaService {
 		tarefa.edita(tarefaRequest);
 		tarefaRepository.salva(tarefa);
 		log.info("[finaliza] TarefaApplicationService - editaTarefa");
-
 	}
 
 	@Override

@@ -12,6 +12,8 @@ public interface TarefaRepository {
 
     Optional<Tarefa> buscaTarefaPorId(UUID idTarefa);
 
+    void desativaTarefasId(UUID idUsuario);
+
     void deletaTodasAsTarefasDoUsuario(List<Tarefa> tarefasUsuario);
 
     List<Tarefa> buscaTarefasPorUsuario(UUID idUsuario);

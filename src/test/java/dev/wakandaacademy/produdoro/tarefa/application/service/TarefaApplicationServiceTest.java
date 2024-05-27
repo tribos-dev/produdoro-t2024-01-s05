@@ -7,6 +7,7 @@ import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
+import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
@@ -35,6 +36,8 @@ class TarefaApplicationServiceTest {
 	// @MockBean
 	@Mock
 	TarefaRepository tarefaRepository;
+
+	// @MockBean
 	@Mock
 	UsuarioRepository usuarioRepository;
 
@@ -48,6 +51,18 @@ class TarefaApplicationServiceTest {
 		assertNotNull(response);
 		assertEquals(TarefaIdResponse.class, response.getClass());
 		assertEquals(UUID.class, response.getIdTarefa().getClass());
+	}
+
+	@Test
+	void deveRetornarTarefaAtiva() {
+		Usuario usuarioRequest = DataHelper.createUsuario();
+		Tarefa tarefa = DataHelper.createTarefa();
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuarioRequest);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+		tarefaApplicationService.ativaTarefa(usuarioRequest.getEmail(), tarefa.getIdTarefa());
+
+		verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
+		assertEquals(StatusAtivacaoTarefa.ATIVA, tarefa.getStatusAtivacao());
 	}
 
 	@Test
