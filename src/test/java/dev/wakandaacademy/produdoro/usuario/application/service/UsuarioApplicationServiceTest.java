@@ -50,7 +50,7 @@ class UsuarioApplicationServiceTest {
         // Entao
         assertEquals(APIException.class, e.getClass());
         assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusException());
-        assertEquals("credencial de autenticação não é válida.", e.getMessage());
+        assertEquals("Credencial de autenticação não é válida", e.getMessage());
     }
 
 }
