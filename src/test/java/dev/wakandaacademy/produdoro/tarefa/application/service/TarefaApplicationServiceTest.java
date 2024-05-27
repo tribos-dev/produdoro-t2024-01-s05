@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -21,15 +24,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import org.springframework.http.HttpStatus;
-import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
-import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaApplicationServiceTest {
@@ -37,25 +38,35 @@ class TarefaApplicationServiceTest {
 	// @Autowired
 	@InjectMocks
 	TarefaApplicationService tarefaApplicationService;
-
 	// @MockBean
 	@Mock
 	TarefaRepository tarefaRepository;
-
 	@Mock
 	UsuarioRepository usuarioRepository;
 
-
-    @Test
-    void deveRetornarIdTarefaNovaCriada() {
-        TarefaRequest request = getTarefaRequest();
-        when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request));
+	@Test
+	void deveRetornarIdTarefaNovaCriada() {
+		TarefaRequest request = getTarefaRequest();
+		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request));
 
 		TarefaIdResponse response = tarefaApplicationService.criaNovaTarefa(request);
 
 		assertNotNull(response);
 		assertEquals(TarefaIdResponse.class, response.getClass());
 		assertEquals(UUID.class, response.getIdTarefa().getClass());
+	}
+
+	@Test
+	void deveEditarTarefa() {
+		Usuario usuarioEmail = DataHelper.createUsuario();
+		Tarefa tarefaRequest = DataHelper.createTarefa();
+		EditaTarefaRequest request = DataHelper.alteraTarefa();
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuarioEmail);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefaRequest));
+		tarefaApplicationService.editaTarefa(usuarioEmail.getEmail(), tarefaRequest.getIdTarefa(), request);
+		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuarioEmail.getEmail());
+		verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefaRequest.getIdTarefa());
+		assertEquals("Tarefa alterada", tarefaRequest.getDescricao());
 	}
 
 	@Test
@@ -68,11 +79,10 @@ class TarefaApplicationServiceTest {
 		assertEquals(tarefa.getStatus(), StatusTarefa.CONCLUIDA);
 	}
 
-
-    public TarefaRequest getTarefaRequest() {
-        TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
-        return request;
-    }
+	public TarefaRequest getTarefaRequest() {
+		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
+		return request;
+	}
 
     @Test
     public void testBuscaTodasTarefasPorUsuario() {

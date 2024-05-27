@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -36,17 +37,27 @@ public class TarefaApplicationService implements TarefaService {
 		return TarefaIdResponse.builder().idTarefa(tarefaCriada.getIdTarefa()).build();
 	}
 
-    @Override
-    public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
-        log.info("[inicia] TarefaApplicationService - detalhaTarefa");
-        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-        log.info("[usuarioPorEmail] {}", usuarioPorEmail);
-        Tarefa tarefa =
-                tarefaRepository.buscaTarefaPorId(idTarefa).orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
-        tarefa.pertenceAoUsuario(usuarioPorEmail);
-        log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
-        return tarefa;
-    }
+	@Override
+	public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - detalhaTarefa");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
+				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
+		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
+		return tarefa;
+	}
+
+	@Override
+	public void editaTarefa(String emailUsuario, UUID idTarefa, EditaTarefaRequest tarefaRequest) {
+		log.info("[inicia] TarefaApplicationService - editaTarefa");
+		Tarefa tarefa = detalhaTarefa(emailUsuario, idTarefa);
+		tarefa.edita(tarefaRequest);
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - editaTarefa");
+
+	}
 	@Override
 	public List<TarefaListResponse> buscaTarefasPorUsuario(String usuario, UUID idUsuario) {
 		log.info("[inicia] TarefaApplicationService - buscaTarefasPorUsuario");
