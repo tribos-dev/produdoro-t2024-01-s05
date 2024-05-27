@@ -9,4 +9,5 @@ public interface UsuarioService {
 	UsuarioCriadoResponse criaNovoUsuario(UsuarioNovoRequest usuarioNovo);
     UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario);
 
+    void mudaParaPausaLonga(String usuario, UUID idUsuario);
 }

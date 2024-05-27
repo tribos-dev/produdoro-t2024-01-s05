@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.Email;
 
+import dev.wakandaacademy.produdoro.handler.APIException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -48,5 +50,14 @@ public class Usuario {
 		if (!this.idUsuario.equals(idUsuario)) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é válida");
 		}
+	}
+
+	public void mudaParaPausaLonga(){
+		this.status = StatusUsuario.PAUSA_LONGA;
+	}
+
+	public void mudaStatusParaPausaLonga(UUID idUsuario) {
+		validaUsuario(idUsuario);
+		mudaParaPausaLonga();
 	}
 }
