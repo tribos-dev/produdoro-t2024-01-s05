@@ -12,6 +12,7 @@ import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
+import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
@@ -101,5 +102,20 @@ public class TarefaApplicationService implements TarefaService {
 		}
 		tarefaRepository.deletaTodasAsTarefasDoUsuario(tarefasUsuario);
 		log.info("[finaliza] TarefaApplicationService - deletaTodasAsTarefasDoUsuario");
+	}
+
+	@Override
+	public void deletaTarefasConcluidas(String usuarioEmail, UUID idUsuario) {
+		log.info("[inicia] TarefaApplicationService - deletaTarefaconcluida");	
+		usuarioRepository.buscaUsuarioPorId(idUsuario);
+		Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(usuarioEmail);
+		log.info("[usuarioPorEmail] {}", usuario);
+		usuario.validaUsuario(idUsuario);
+		boolean tarefasExcluidas = tarefaRepository.deletaConcluidas(idUsuario, StatusTarefa.CONCLUIDA);
+		log.info("[tarefasExcluidas] {}", tarefasExcluidas);
+		if (!tarefasExcluidas) {          
+            throw APIException.build(HttpStatus.NOT_FOUND, "Usuário não possui nenhuma tarefa concluída!");
+        }
+		log.info("[finaliza] TarefaApplicationService - deletaTarefaconcluida");
 	}
 }

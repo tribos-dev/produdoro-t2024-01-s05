@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -119,6 +120,72 @@ class TarefaApplicationServiceTest {
 	public TarefaRequest getTarefaRequest() {
 		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
 		return request;
+	}
+
+	@Test
+	public void testDeletaTarefasConcluidas_Success() {
+		Usuario usuario = DataHelper.createUsuario();
+
+		when(usuarioRepository.buscaUsuarioPorId(any(UUID.class))).thenReturn(usuario);
+		when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+		when(tarefaRepository.deletaConcluidas(usuario.getIdUsuario(), StatusTarefa.CONCLUIDA)).thenReturn(true);
+
+		assertDoesNotThrow(
+				() -> tarefaApplicationService.deletaTarefasConcluidas(usuario.getEmail(), usuario.getIdUsuario()));
+
+		verify(usuarioRepository).buscaUsuarioPorId(usuario.getIdUsuario());
+		verify(usuarioRepository).buscaUsuarioPorEmail(usuario.getEmail());
+		verify(tarefaRepository).deletaConcluidas(usuario.getIdUsuario(), StatusTarefa.CONCLUIDA);
+	}
+
+	@Test
+	public void testDeletaTarefasConcluidas_UsuarioSemTarefasConcluidas() {
+		Usuario usuario = DataHelper.createUsuario();
+
+		when(usuarioRepository.buscaUsuarioPorId(any(UUID.class))).thenReturn(usuario);
+		when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+		when(tarefaRepository.deletaConcluidas(usuario.getIdUsuario(), StatusTarefa.CONCLUIDA)).thenReturn(false);
+
+		APIException exception = assertThrows(APIException.class,
+				() -> tarefaApplicationService.deletaTarefasConcluidas(usuario.getEmail(), usuario.getIdUsuario()));
+
+		assertEquals(HttpStatus.NOT_FOUND, exception.getStatusException());
+		assertEquals("Usuário não possui nenhuma tarefa concluída!", exception.getMessage());
+	}
+
+	@Test
+	public void testDeletaTarefasConcluidas_UsuarioComIdInvalido() {
+		Usuario usuario = DataHelper.createUsuario();
+		String email = usuario.getEmail();
+		UUID idInvalido = UUID.randomUUID();
+
+		when(usuarioRepository.buscaUsuarioPorId(any()))
+				.thenThrow(APIException.build(HttpStatus.NOT_FOUND, "Usuario não encontrado!"));
+
+		assertThrows(APIException.class, () -> {
+			tarefaApplicationService.deletaTarefasConcluidas(email, idInvalido);
+		});
+
+		verify(usuarioRepository).buscaUsuarioPorId(idInvalido);
+	}
+
+	public void testDeletaTarefasConcluidas_EmailUsuarioInvalido() {
+		Usuario usuario = DataHelper.createUsuario();
+		String usuarioEmailInvalido = "invalid@example.com";
+		UUID idUsuario = usuario.getIdUsuario();
+
+		// Arrange
+		when(usuarioRepository.buscaUsuarioPorId(idUsuario)).thenReturn(usuario);
+		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(null);
+
+		// Act & Assert
+		assertThrows(APIException.class, () -> {
+			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, idUsuario);
+		});
+
+		// Verify
+		verify(usuarioRepository).buscaUsuarioPorId(idUsuario);
+		verify(usuarioRepository).buscaUsuarioPorEmail(usuarioEmailInvalido);
 	}
 
 	@Test

@@ -47,19 +47,22 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[inicia] UsuarioController - mudaStatusParaFoco");
 		log.info("[idUsuario] {}", idUsuario);
 		String usuario = getUsuarioByToken(token);
-		usuarioAppplicationService.mudaStatusParaFoco(usuario,idUsuario);
+		usuarioAppplicationService.mudaStatusParaFoco(usuario, idUsuario);
 		log.info("[finaliza] UsuarioController - mudaStatusParaFoco");
 	}
 
 	private String getUsuarioByToken(String token) {
 		log.debug("[token] {}", token);
-		String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
+		String usuario = tokenService.getUsuarioByBearerToken(token)
+				.orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
 		log.info("[usuario] {}", usuario);
 		return usuario;
 	}
+
 	public void mudaParaPausaLonga(String token, UUID idUsuario) {
 		log.info("[inicia] - UsuarioController - mudaParaPausaLonga");
-		String usuario = tokenService.getUsuarioByBearerToken(token).orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
+		String usuario = tokenService.getUsuarioByBearerToken(token)
+				.orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, token));
 		usuarioAppplicationService.mudaParaPausaLonga(usuario, idUsuario);
 		log.info("[finaliza] - UsuarioController - mudaParaPausaLonga");
 	}
@@ -68,10 +71,10 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[inicia] UsuarioController - mudaStatusPausaCurta");
 		log.info("[idUsuario] {}", idUsuario);
 		String usuario = tokenService.getUsuarioByBearerToken(token)
-				.orElseThrow(() -> APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é valida."));
+				.orElseThrow(
+						() -> APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é valida."));
 		usuarioAppplicationService.mudaStatusParaPausaCurta(idUsuario, usuario);
 		log.info("[finaliza] UsuarioController - mudaStatusPausaCurta");
 	}
 
 }
-

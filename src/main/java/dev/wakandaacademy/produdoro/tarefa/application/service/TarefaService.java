@@ -14,6 +14,8 @@ public interface TarefaService {
 
     Tarefa detalhaTarefa(String usuario, UUID idTarefa);
 
+    void deletaTarefasConcluidas(String email, UUID idUsuario);
+
     void ativaTarefa(String usuario, UUID idTarefa);
 
     void editaTarefa(String emailUsuario, UUID idTarefa, EditaTarefaRequest tarefaRequest);
