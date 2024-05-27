@@ -13,4 +13,6 @@ public interface TarefaSpringMongoDBRepository extends MongoRepository<Tarefa, U
 
     @Query("{'idUsuario': ?0, 'statusAtivacao': 'ATIVA'}")
     List<Tarefa> findTarefasAtivasByUsuario(UUID idUsuario);
+
+    List<Tarefa> findAllByIdUsuario(UUID idUsuario);
 }
