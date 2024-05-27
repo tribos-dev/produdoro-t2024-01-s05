@@ -25,60 +25,58 @@ import lombok.NoArgsConstructor;
 @Getter
 @Document(collection = "Tarefa")
 public class Tarefa {
-	@Id
-	private UUID idTarefa;
-	@NotBlank
-	private String descricao;
-	@Indexed
-	private UUID idUsuario;
-	@Indexed
-	private UUID idArea;
-	@Indexed
-	private UUID idProjeto;
-	private StatusTarefa status;
-	private StatusAtivacaoTarefa statusAtivacao;
-	private int contagemPomodoro;
-	private Integer posicao;
+    @Id
+    private UUID idTarefa;
+    @NotBlank
+    private String descricao;
+    @Indexed
+    private UUID idUsuario;
+    @Indexed
+    private UUID idArea;
+    @Indexed
+    private UUID idProjeto;
+    private StatusTarefa status;
+    private StatusAtivacaoTarefa statusAtivacao;
+    private int contagemPomodoro;
+    private Integer posicao;
 
-	public Tarefa(TarefaRequest tarefaRequest, int novaPosicao) {
-		this.idTarefa = UUID.randomUUID();
-		this.idUsuario = tarefaRequest.getIdUsuario();
-		this.descricao = tarefaRequest.getDescricao();
-		this.idArea = tarefaRequest.getIdArea();
-		this.idProjeto = tarefaRequest.getIdProjeto();
-		this.status = StatusTarefa.A_FAZER;
-		this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
-		this.contagemPomodoro = 1;
-		this.posicao = novaPosicao;
-	}
+    public Tarefa(TarefaRequest tarefaRequest, int novaPosicao) {
+        this.idTarefa = UUID.randomUUID();
+        this.idUsuario = tarefaRequest.getIdUsuario();
+        this.descricao = tarefaRequest.getDescricao();
+        this.idArea = tarefaRequest.getIdArea();
+        this.idProjeto = tarefaRequest.getIdProjeto();
+        this.status = StatusTarefa.A_FAZER;
+        this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
+        this.contagemPomodoro = 1;
+        this.posicao = novaPosicao;
+    }
 
-	public void pertenceAoUsuario(Usuario usuarioPorEmail) {
-		if (!this.idUsuario.equals(usuarioPorEmail.getIdUsuario())) {
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
-		}
-	}
+    public void pertenceAoUsuario(Usuario usuarioPorEmail) {
+        if (!this.idUsuario.equals(usuarioPorEmail.getIdUsuario())) {
+            throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
+        }
+    }
 
-	public void desativaTarefas() {
-		this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
-	}
+    public void desativaTarefas() {
+        this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
+    }
 
-	public void ativaTarefa() {
-		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
-	}
+    public void ativaTarefa() {
+        this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
+    }
 
-	public void edita(EditaTarefaRequest tarefaRequest) {
-		this.descricao = tarefaRequest.getDescricao();
-	}
+    public void edita(EditaTarefaRequest tarefaRequest) {
+        this.descricao = tarefaRequest.getDescricao();
+    }
 
-	public void concluiTarefa() {
-		this.status = StatusTarefa.CONCLUIDA;
+    public void concluiTarefa() {
+        this.status = StatusTarefa.CONCLUIDA;
 
-	}
+    }
 
-<<<<<<< HEAD
-	public void atualizaPosicaoTarefa(int novaPosicao) {
-		this.posicao = novaPosicao;
-	}
-=======
->>>>>>> 6eb8e3958c1c6eb3111e7b77631aa903b2185ff6
+    public void atualizaPosicaoTarefa(int novaPosicao) {
+        this.posicao = novaPosicao;
+    }
+
 }

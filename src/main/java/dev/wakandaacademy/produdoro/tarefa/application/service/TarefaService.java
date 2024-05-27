@@ -30,7 +30,7 @@ public interface TarefaService {
     void editaTarefa(String emailUsuario, UUID idTarefa, EditaTarefaRequest tarefaRequest);
 
     List<TarefaListResponse> buscaTarefasPorUsuario(String usuario, UUID idUsuario);
-    
+
     void deletaTodasAsTarefasDoUsuario(String emailUsuario, UUID idUsuario);
 
     void deletaTarefasConcluidas(String usuario, UUID idUsuario);
