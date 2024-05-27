@@ -105,5 +105,17 @@ class TarefaApplicationServiceTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, e.getStatusException());
         assertEquals("Usuario não encontrado!", e.getMessage());
+
+    }
+    @Test
+    void deveDeletarTarefa() {
+        Usuario usuario = DataHelper.createUsuario();
+        Tarefa tarefa = DataHelper.createTarefa();
+        when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+        when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+
+        tarefaApplicationService.deletaTarefa(usuario.getEmail(), tarefa.getIdTarefa());
+        verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+        verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
     }
 }
