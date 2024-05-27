@@ -21,7 +21,7 @@ public class TarefaListResponse {
 	private int contagemPomodoro;
 	
 	public TarefaListResponse(Tarefa tarefa) {
-		this.idTarefa = UUID.randomUUID();
+		this.idTarefa = tarefa.getIdTarefa();
 		this.idUsuario = tarefa.getIdUsuario();
 		this.descricao = tarefa.getDescricao();
 		this.idArea = tarefa.getIdArea();
