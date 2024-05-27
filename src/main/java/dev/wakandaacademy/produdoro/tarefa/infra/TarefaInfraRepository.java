@@ -71,7 +71,6 @@ public class TarefaInfraRepository implements TarefaRepository {
 
     private void validaNovaPosicao(List<Tarefa> tarefas, Tarefa tarefa, TarefaNovaPosicaoRequest tarefaNovaPosicaoRequest) {
         int posicaoAntiga = tarefa.getPosicao();
-
         int tamanhoListaTarefas = tarefas.size();
         if (tarefaNovaPosicaoRequest.getNovaPosicao() >= tamanhoListaTarefas || tarefaNovaPosicaoRequest.getNovaPosicao().equals(posicaoAntiga)) {
             String mensagem = tarefaNovaPosicaoRequest.getNovaPosicao() >= tamanhoListaTarefas
