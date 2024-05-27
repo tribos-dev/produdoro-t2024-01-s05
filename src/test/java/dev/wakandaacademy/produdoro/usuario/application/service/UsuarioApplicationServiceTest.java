@@ -14,7 +14,8 @@ import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -29,7 +30,42 @@ class UsuarioApplicationServiceTest {
     UsuarioRepository usuarioRepository;
 
     @Test
-    void deveMudarOStatusParaPausaLonga(){
+    void sucessoAlteraStatusParaPausaCurta() {
+        Usuario usuario = DataHelper.createUsuario();
+        when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+        when(usuarioRepository.buscaUsuarioPorId(any(UUID.class))).thenReturn(usuario);
+        usuarioApplicationService.mudaStatusParaPausaCurta(usuario.getIdUsuario(), usuario.getEmail());
+        verify(usuarioRepository, times(1)).salva(usuario);
+        assertEquals(StatusUsuario.PAUSA_CURTA, usuario.getStatus());
+    }
+
+    @Test
+    void usuarioInvalidoNaoMudarStatusParaPausaCurta() {
+        Usuario usuario = DataHelper.createUsuario();
+        UUID idUsuarioInvalido = UUID.fromString("b92ee6fa-9ae9-45ac-afe0-fb8e4460d839");
+        when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+
+        APIException e = assertThrows(APIException.class,
+                () -> usuarioApplicationService.mudaStatusParaPausaCurta(idUsuarioInvalido, usuario.getEmail()));
+        assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusException());
+    }
+
+    @Test
+    void deveMudarStatusParaFoco() {
+        // Dado
+        Usuario usuario = DataHelper.createUsuario();
+        // Quando
+        when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+        when(usuarioRepository.buscaUsuarioPorId(any())).thenReturn(usuario);
+        usuarioApplicationService.mudaStatusParaFoco(usuario.getEmail(), usuario.getIdUsuario());
+        // Entao
+        assertEquals(StatusUsuario.FOCO, usuario.getStatus());
+        verify(usuarioRepository, times(1)).buscaUsuarioPorId(usuario.getIdUsuario());
+        verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+        verify(usuarioRepository, times(1)).salva(usuario);
+    }
+
+    void deveMudarOStatusParaPausaLonga() {
         // Dado
         Usuario usuario = DataHelper.createUsuario();
         // Quando
@@ -40,17 +76,18 @@ class UsuarioApplicationServiceTest {
         assertEquals(StatusUsuario.PAUSA_LONGA, usuario.getStatus());
         verify(usuarioRepository, times(1)).salva(any());
     }
+
     @Test
-    void naoDeveMudarOStatusParaPausaLonga(){
+    void naoDeveMudarOStatusParaPausaLonga() {
         // Dado
         Usuario usuario = DataHelper.createUsuario();
         // Quando
         when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
-        APIException e = assertThrows(APIException.class, () -> usuarioApplicationService.mudaParaPausaLonga(usuario.getEmail(), UUID.randomUUID()));
+        APIException e = assertThrows(APIException.class,
+                () -> usuarioApplicationService.mudaParaPausaLonga(usuario.getEmail(), UUID.randomUUID()));
         // Entao
         assertEquals(APIException.class, e.getClass());
         assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusException());
-        assertEquals("credencial de autenticação não é válida.", e.getMessage());
+        assertEquals("Credencial de autenticação não é válida", e.getMessage());
     }
-
 }
