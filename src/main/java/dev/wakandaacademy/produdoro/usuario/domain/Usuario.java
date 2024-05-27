@@ -62,7 +62,6 @@ public class Usuario {
         this.status = StatusUsuario.FOCO;
     }
 
-
     public void validaUsuario(UUID idUsuario) {
         if (!this.idUsuario.equals(idUsuario)) {
             throw APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é válida");
@@ -73,18 +72,19 @@ public class Usuario {
         this.status = StatusUsuario.PAUSA_CURTA;
     }
 
+    public void pertenceAoUsuario(Usuario usuarioPorEmail) {
+        if (!this.getIdUsuario().equals(usuarioPorEmail.getIdUsuario())) {
+            throw APIException.build(HttpStatus.UNAUTHORIZED,
+                    "Usuário(a) não autorizado(a) para a requisição solicitada.");
+        }
+    }
+
     public void mudaParaPausaLonga() {
         this.status = StatusUsuario.PAUSA_LONGA;
     }
-
 
     public void mudaStatusParaPausaLonga(UUID idUsuario) {
         validaUsuario(idUsuario);
         mudaParaPausaLonga();
     }
 }
-
-
-
-
-

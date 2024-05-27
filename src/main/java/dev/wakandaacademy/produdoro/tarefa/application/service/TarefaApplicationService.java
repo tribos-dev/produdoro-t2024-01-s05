@@ -1,5 +1,6 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,7 @@ public class TarefaApplicationService implements TarefaService {
 		log.info("[finaliza] TarefaApplicationService - editaTarefa");
 
 	}
+
 	@Override
 	public List<TarefaListResponse> buscaTarefasPorUsuario(String usuario, UUID idUsuario) {
 		log.info("[inicia] TarefaApplicationService - buscaTarefasPorUsuario");
@@ -78,4 +80,18 @@ public class TarefaApplicationService implements TarefaService {
 		log.info("[inicia] TarefaApplicationService - concluiTarefa");
 	}
 
+	@Override
+	public void deletaTodasAsTarefasDoUsuario(String emailUsuario, UUID idUsuario) {
+		log.info("[inicia] TarefaApplicationService - deletaTodasAsTarefasDoUsuario");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(emailUsuario);
+		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+		Usuario usuario = usuarioRepository.buscaUsuarioPorId(idUsuario);
+		usuario.pertenceAoUsuario(usuarioPorEmail);
+		List<Tarefa> tarefasUsuario = tarefaRepository.buscaTarefasPorUsuario(usuario.getIdUsuario());
+		if (tarefasUsuario.isEmpty()) {
+			throw APIException.build(HttpStatus.BAD_REQUEST, "Usuário não possui tarefa(as) cadastrada(as)");
+		}
+		tarefaRepository.deletaTodasAsTarefasDoUsuario(tarefasUsuario);
+		log.info("[finaliza] TarefaApplicationService - deletaTodasAsTarefasDoUsuario");
+	}
 }
