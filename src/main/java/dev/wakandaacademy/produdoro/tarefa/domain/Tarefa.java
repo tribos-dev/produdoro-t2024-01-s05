@@ -60,4 +60,10 @@ public class Tarefa {
 		this.descricao = tarefaRequest.getDescricao();
 	}
 
+	public void concluiTarefa() {
+		this.status = StatusTarefa.CONCLUIDA;
+
+	}
+
 }
+
