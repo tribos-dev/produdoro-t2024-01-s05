@@ -2,10 +2,7 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import dev.wakandaacademy.produdoro.DataHelper;
 import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
+import dev.wakandaacademy.produdoro.tarefa.application.api.*;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
@@ -45,7 +42,8 @@ class TarefaApplicationServiceTest {
 	@Test
 	void deveRetornarIdTarefaNovaCriada() {
 		TarefaRequest request = getTarefaRequest();
-		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request));
+		int novaPosicao = tarefaRepository.contarTarefas(getTarefaRequest().getIdUsuario());
+		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request, novaPosicao));
 
 		TarefaIdResponse response = tarefaApplicationService.criaNovaTarefa(request);
 
@@ -231,6 +229,33 @@ class TarefaApplicationServiceTest {
 
 		assertEquals(HttpStatus.BAD_REQUEST, e.getStatusException());
 		assertEquals("Usuario não encontrado!", e.getMessage());
+	}
+
+	@Test
+	public void testMudaOrdemDeUmaTarefa() {
+		Usuario usuario = DataHelper.createUsuario();
+		List<Tarefa> tarefas = DataHelper.createListTarefa();
+		var posicao = DataHelper.novaPosicaoRequest(2);
+		Tarefa tarefa = DataHelper.createTarefa();
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+		when(tarefaRepository.buscaTarefasPorUsuario(any())).thenReturn(tarefas);
+		tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(), tarefa.getIdTarefa(), posicao);
+		verify(tarefaRepository, times(1)).mudaOrdemDeUmaTarefa(tarefa, tarefas, posicao);
+	}
+
+	@Test
+	public void testNaoMudaOrdemDeUmaTarefa() {
+		Usuario usuario = DataHelper.createUsuario();
+		List<Tarefa> tarefas = DataHelper.createListTarefa();
+		var posicao = DataHelper.novaPosicaoRequest(2);
+		Tarefa tarefaNaoExiste = DataHelper.createTarefa();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.empty());
+		assertThrows(APIException.class, () -> tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(), tarefaNaoExiste.getIdTarefa(), posicao));
+		verify(tarefaRepository, never()).mudaOrdemDeUmaTarefa(tarefaNaoExiste, tarefas, posicao);
+
 	}
 
 	@Test

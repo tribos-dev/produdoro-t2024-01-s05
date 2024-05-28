@@ -12,6 +12,9 @@ import java.util.UUID;
 public interface TarefaSpringMongoDBRepository extends MongoRepository<Tarefa, UUID> {
     Optional<Tarefa> findByIdTarefa(UUID idTarefa);
 
+
+    Integer countByIdUsuario(UUID idUsuario);
+
     long deleteByIdUsuarioAndStatus(UUID idUsuario, StatusTarefa concluida);
 
     @Query("{'idUsuario': ?0, 'statusAtivacao': 'ATIVA'}")
