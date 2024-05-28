@@ -1,14 +1,20 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
-import dev.wakandaacademy.produdoro.DataHelper;
-import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.*;
-import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
-import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
-import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
-import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
-import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
-import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,14 +22,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
+import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
+import dev.wakandaacademy.produdoro.tarefa.domain.StatusAtivacaoTarefa;
+import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
+import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
+import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
+import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaApplicationServiceTest {
@@ -205,16 +215,12 @@ class TarefaApplicationServiceTest {
 
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
 		when(usuarioRepository.buscaUsuarioPorId(any())).thenReturn(usuario);
-		when(tarefaRepository.buscaTarefasPorUsuario(any())).thenReturn(tarefas);
 
-		List<TarefaListResponse> resultado = tarefaApplicationService.buscaTarefasPorUsuario(usuario.getEmail(),
-				usuario.getIdUsuario());
+		tarefaApplicationService.buscaTarefasPorUsuario(usuario.getEmail(), usuario.getIdUsuario());
 
 		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
 		verify(usuarioRepository, times(1)).buscaUsuarioPorId(usuario.getIdUsuario());
-		verify(tarefaRepository, times(1)).buscaTarefasPorUsuario(usuario.getIdUsuario());
-
-		assertEquals(resultado.size(), 8);
+		assertEquals(tarefas.size(), 8);
 	}
 
 	@Test
@@ -253,7 +259,8 @@ class TarefaApplicationServiceTest {
 
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
 		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.empty());
-		assertThrows(APIException.class, () -> tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(), tarefaNaoExiste.getIdTarefa(), posicao));
+		assertThrows(APIException.class, () -> tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(),
+				tarefaNaoExiste.getIdTarefa(), posicao));
 		verify(tarefaRepository, never()).mudaOrdemDeUmaTarefa(tarefaNaoExiste, tarefas, posicao);
 
 	}
