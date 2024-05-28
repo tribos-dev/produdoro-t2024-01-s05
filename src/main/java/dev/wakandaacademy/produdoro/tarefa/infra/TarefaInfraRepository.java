@@ -5,6 +5,8 @@ import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaNovaPosicaoRequ
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import dev.wakandaacademy.produdoro.tarefa.domain.StatusTarefa;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
+import dev.wakandaacademy.produdoro.usuario.domain.StatusUsuario;
+import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,6 +29,7 @@ public class TarefaInfraRepository implements TarefaRepository {
 
     private final TarefaSpringMongoDBRepository tarefaSpringMongoDBRepository;
     private final MongoTemplate mongoTemplate;
+    private Integer contagemPomodoroPausaCurta = 0;
 
     @Override
     public Tarefa salva(Tarefa tarefa) {
@@ -130,5 +133,25 @@ public class TarefaInfraRepository implements TarefaRepository {
         log.info("[inicia] TarefaInfraRepository - deletaTarefa");
         tarefaSpringMongoDBRepository.delete(tarefa);
         log.info("[finaliza] TarefaInfraRepository - deletaTarefa");
+    }
+
+    @Override
+    public void processaStatusEContadorPomodoro(Usuario usuarioPorEmail) {
+        log.info("[inicia] - TarefaInfraRepository - processaStatusEContadorPomodoro");
+        if (usuarioPorEmail.getStatus().equals(StatusUsuario.FOCO)) {
+            if (this.contagemPomodoroPausaCurta < 3) {
+                usuarioPorEmail.mudaStatusPausaCurta();
+            } else {
+                usuarioPorEmail.mudaStatusParaPausaLonga();
+                this.contagemPomodoroPausaCurta = 0;
+            }
+        } else {
+            usuarioPorEmail.alteraStatusParaFoco(usuarioPorEmail.getIdUsuario());
+            this.contagemPomodoroPausaCurta++;
+        }
+        Query query = Query.query(Criteria.where("idUsuario").is(usuarioPorEmail.getIdUsuario()));
+        Update updateUsuario = Update.update("status", usuarioPorEmail.getStatus());
+        mongoTemplate.updateMulti(query, updateUsuario, Usuario.class);
+        log.info("[finaliza] - TarefaInfraRepository - processaStatusEContadorPomodoro");
     }
 }

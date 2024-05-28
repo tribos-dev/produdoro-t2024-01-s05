@@ -72,6 +72,26 @@ public class TarefaApplicationService implements TarefaService {
         tarefaRepository.mudaOrdemDeUmaTarefa(tarefa,todasTarefas,tarefaNovaPosicaoRequest);
         log.info("[finaliza] TarefaApplicationService - mudaOrdemDeUmaTarefa");
     }
+	@Override
+	public void imcrementaPomodoro(String usuario, UUID idTarefa) {
+		log.info("[inicia] - TarefaApplicationService - imcrementaPomodoro");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		tarefa.incrementaPomodoro(usuarioPorEmail);
+		tarefaRepository.salva(tarefa);
+		tarefaRepository.processaStatusEContadorPomodoro(usuarioPorEmail);
+		log.info("[finaliza] - TarefaApplicationService - imcrementaPomodoro");
+	}
+
+	@Override
+	public void ativaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - ativaTarefa");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefaRepository.desativaTarefasId(tarefa.getIdUsuario());
+		tarefa.ativaTarefa();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - ativaTarefa");
+	}
 
 
 	@Override
@@ -100,11 +120,6 @@ public class TarefaApplicationService implements TarefaService {
 		Tarefa tarefa = detalhaTarefa(emailUsuario, idTarefa);
 		tarefaRepository.deletaTarefa(tarefa);
 		log.info("[inicia] TarefaApplicationService - concluiTarefa");
-	}
-
-	@Override
-	public void ativaTarefa(String usuario, UUID idTarefa) {
-
 	}
 
 	@Override

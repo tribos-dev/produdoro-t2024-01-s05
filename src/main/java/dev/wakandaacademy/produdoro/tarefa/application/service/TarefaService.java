@@ -22,6 +22,7 @@ public interface TarefaService {
 
     void mudaOrdemDeUmaTarefa(String email, UUID idTarefa, TarefaNovaPosicaoRequest tarefaNovaPosicaoRequest);
 
+    void imcrementaPomodoro(String usuario, UUID idTarefa);
 
     void deletaTarefa(String emailUsuario, UUID idTarefa);
 
@@ -35,4 +36,3 @@ public interface TarefaService {
 
     void deletaTarefasConcluidas(String usuario, UUID idUsuario);
 }
-

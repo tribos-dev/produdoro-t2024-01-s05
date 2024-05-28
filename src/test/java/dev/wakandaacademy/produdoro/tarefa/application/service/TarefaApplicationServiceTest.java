@@ -42,8 +42,8 @@ class TarefaApplicationServiceTest {
 	@Test
 	void deveRetornarIdTarefaNovaCriada() {
 		TarefaRequest request = getTarefaRequest();
-		int novaPosicao = tarefaRepository.contarTarefas( getTarefaRequest().getIdUsuario());
-		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request,novaPosicao));
+		int novaPosicao = tarefaRepository.contarTarefas(getTarefaRequest().getIdUsuario());
+		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request, novaPosicao));
 
 		TarefaIdResponse response = tarefaApplicationService.criaNovaTarefa(request);
 
@@ -179,22 +179,22 @@ class TarefaApplicationServiceTest {
 		verify(usuarioRepository).buscaUsuarioPorId(idInvalido);
 	}
 
+	@Test
 	public void testDeletaTarefasConcluidas_EmailUsuarioInvalido() {
 		Usuario usuario = DataHelper.createUsuario();
 		String usuarioEmailInvalido = "invalid@example.com";
-		UUID idUsuario = usuario.getIdUsuario();
 
 		// Arrange
-		when(usuarioRepository.buscaUsuarioPorId(idUsuario)).thenReturn(usuario);
-		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(null);
+		when(usuarioRepository.buscaUsuarioPorId(usuario.getIdUsuario())).thenReturn(usuario);
+		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(usuario);
 
 		// Act & Assert
 		assertThrows(APIException.class, () -> {
-			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, idUsuario);
+			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, usuario.getIdUsuario());
 		});
 
 		// Verify
-		verify(usuarioRepository).buscaUsuarioPorId(idUsuario);
+		verify(usuarioRepository).buscaUsuarioPorId(usuario.getIdUsuario());
 		verify(usuarioRepository).buscaUsuarioPorEmail(usuarioEmailInvalido);
 	}
 
@@ -232,29 +232,42 @@ class TarefaApplicationServiceTest {
 	}
 
 	@Test
-	public void testMudaOrdemDeUmaTarefa(){
+	public void testMudaOrdemDeUmaTarefa() {
 		Usuario usuario = DataHelper.createUsuario();
 		List<Tarefa> tarefas = DataHelper.createListTarefa();
 		var posicao = DataHelper.novaPosicaoRequest(2);
-		Tarefa tarefa =DataHelper.createTarefa();
+		Tarefa tarefa = DataHelper.createTarefa();
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
 		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
 		when(tarefaRepository.buscaTarefasPorUsuario(any())).thenReturn(tarefas);
-		tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(),tarefa.getIdTarefa(),posicao);
-		verify(tarefaRepository,times(1)).mudaOrdemDeUmaTarefa(tarefa,tarefas,posicao);
+		tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(), tarefa.getIdTarefa(), posicao);
+		verify(tarefaRepository, times(1)).mudaOrdemDeUmaTarefa(tarefa, tarefas, posicao);
 	}
+
 	@Test
-	public void testNaoMudaOrdemDeUmaTarefa(){
+	public void testNaoMudaOrdemDeUmaTarefa() {
 		Usuario usuario = DataHelper.createUsuario();
 		List<Tarefa> tarefas = DataHelper.createListTarefa();
 		var posicao = DataHelper.novaPosicaoRequest(2);
-		Tarefa tarefaNaoExiste =DataHelper.createTarefa();
+		Tarefa tarefaNaoExiste = DataHelper.createTarefa();
 
 		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
 		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.empty());
-		assertThrows(APIException.class,()->tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(),tarefaNaoExiste.getIdTarefa(),posicao));
-		verify(tarefaRepository,never()).mudaOrdemDeUmaTarefa(tarefaNaoExiste,tarefas,posicao);
+		assertThrows(APIException.class, () -> tarefaApplicationService.mudaOrdemDeUmaTarefa(usuario.getEmail(), tarefaNaoExiste.getIdTarefa(), posicao));
+		verify(tarefaRepository, never()).mudaOrdemDeUmaTarefa(tarefaNaoExiste, tarefas, posicao);
 
 	}
 
+	@Test
+	void deveIncrementarPomodoroUmaTarefa() {
+		Usuario usuario = DataHelper.createUsuario();
+		Tarefa tarefa = DataHelper.createTarefa();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+
+		tarefaApplicationService.imcrementaPomodoro(usuario.getEmail(), tarefa.getIdTarefa());
+
+		verify(tarefaRepository, times(1)).salva(tarefa);
+	}
 }
