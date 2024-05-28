@@ -181,22 +181,22 @@ class TarefaApplicationServiceTest {
 		verify(usuarioRepository).buscaUsuarioPorId(idInvalido);
 	}
 
+	@Test
 	public void testDeletaTarefasConcluidas_EmailUsuarioInvalido() {
 		Usuario usuario = DataHelper.createUsuario();
 		String usuarioEmailInvalido = "invalid@example.com";
-		UUID idUsuario = usuario.getIdUsuario();
 
 		// Arrange
-		when(usuarioRepository.buscaUsuarioPorId(idUsuario)).thenReturn(usuario);
-		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(null);
+		when(usuarioRepository.buscaUsuarioPorId(usuario.getIdUsuario())).thenReturn(usuario);
+		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(usuario);
 
 		// Act & Assert
 		assertThrows(APIException.class, () -> {
-			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, idUsuario);
+			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, usuario.getIdUsuario());
 		});
 
 		// Verify
-		verify(usuarioRepository).buscaUsuarioPorId(idUsuario);
+		verify(usuarioRepository).buscaUsuarioPorId(usuario.getIdUsuario());
 		verify(usuarioRepository).buscaUsuarioPorEmail(usuarioEmailInvalido);
 	}
 
@@ -231,5 +231,18 @@ class TarefaApplicationServiceTest {
 
 		assertEquals(HttpStatus.BAD_REQUEST, e.getStatusException());
 		assertEquals("Usuario não encontrado!", e.getMessage());
+	}
+
+	@Test
+	void deveIncrementarPomodoroUmaTarefa() {
+		Usuario usuario = DataHelper.createUsuario();
+		Tarefa tarefa = DataHelper.createTarefa();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+
+		tarefaApplicationService.imcrementaPomodoro(usuario.getEmail(), tarefa.getIdTarefa());
+
+		verify(tarefaRepository, times(1)).salva(tarefa);
 	}
 }
