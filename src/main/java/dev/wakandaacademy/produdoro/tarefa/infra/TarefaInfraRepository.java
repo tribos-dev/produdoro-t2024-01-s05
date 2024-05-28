@@ -51,6 +51,7 @@ public class TarefaInfraRepository implements TarefaRepository {
     @Override
     public void mudaOrdemDeUmaTarefa(Tarefa tarefa, List<Tarefa> tarefas, TarefaNovaPosicaoRequest tarefaNovaPosicaoRequest) {
         log.info("[inicia] TarefaInfraRepository - mudaOrdemDeUmaTarefa");
+        validaNovaPosicao(tarefas,tarefa,tarefaNovaPosicaoRequest);
         int posicaoAtual = tarefa.getPosicao();
         int novaPosicao = tarefaNovaPosicaoRequest.getNovaPosicao();
 
