@@ -22,5 +22,6 @@ public interface TarefaRepository {
     void deletaTodasAsTarefasDoUsuario(List<Tarefa> tarefasUsuario);
 
     List<Tarefa> buscaTarefasPorUsuario(UUID idUsuario);
+
     void processaStatusEContadorPomodoro(Usuario usuarioPorEmail);
 }

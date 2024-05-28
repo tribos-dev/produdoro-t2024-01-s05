@@ -41,7 +41,7 @@ public class TarefaRestController implements TarefaAPI {
 	public void imcrementaPomodoro(String token, UUID idTarefa) {
 		log.info("[inicia] - TarefaRestController - imcrementaPomodoro");
 		String usuario = getUsuarioByToken(token);
-		tarefaService.imcrementaPomodoro(usuario,idTarefa);
+		tarefaService.imcrementaPomodoro(usuario, idTarefa);
 		log.info("[finaliza] - TarefaRestController - imcrementaPomodoro");
 	}
 

@@ -88,7 +88,7 @@ public class Usuario {
         mudaParaPausaLonga();
     }
 
-	public void mudaStatusParaPausaLonga() {
-		this.status = StatusUsuario.PAUSA_LONGA;
-	}
+    public void mudaStatusParaPausaLonga() {
+        this.status = StatusUsuario.PAUSA_LONGA;
+    }
 }

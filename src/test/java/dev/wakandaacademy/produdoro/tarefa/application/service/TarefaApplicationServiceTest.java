@@ -185,19 +185,18 @@ class TarefaApplicationServiceTest {
 	public void testDeletaTarefasConcluidas_EmailUsuarioInvalido() {
 		Usuario usuario = DataHelper.createUsuario();
 		String usuarioEmailInvalido = "invalid@example.com";
-		UUID idUsuario = usuario.getIdUsuario();
 
 		// Arrange
-		when(usuarioRepository.buscaUsuarioPorId(idUsuario)).thenReturn(usuario);
-		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(null);
+		when(usuarioRepository.buscaUsuarioPorId(usuario.getIdUsuario())).thenReturn(usuario);
+		when(usuarioRepository.buscaUsuarioPorEmail(usuarioEmailInvalido)).thenReturn(usuario);
 
 		// Act & Assert
 		assertThrows(APIException.class, () -> {
-			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, idUsuario);
+			tarefaApplicationService.deletaTarefasConcluidas(usuarioEmailInvalido, usuario.getIdUsuario());
 		});
 
 		// Verify
-		verify(usuarioRepository).buscaUsuarioPorId(idUsuario);
+		verify(usuarioRepository).buscaUsuarioPorId(usuario.getIdUsuario());
 		verify(usuarioRepository).buscaUsuarioPorEmail(usuarioEmailInvalido);
 	}
 
@@ -235,7 +234,7 @@ class TarefaApplicationServiceTest {
 	}
 
 	@Test
-	void deveIncrementarPomodoroUmaTarefa(){
+	void deveIncrementarPomodoroUmaTarefa() {
 		Usuario usuario = DataHelper.createUsuario();
 		Tarefa tarefa = DataHelper.createTarefa();
 

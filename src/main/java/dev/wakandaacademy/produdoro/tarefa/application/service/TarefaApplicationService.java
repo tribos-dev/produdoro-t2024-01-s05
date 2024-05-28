@@ -1,5 +1,11 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
@@ -34,15 +40,16 @@ public class TarefaApplicationService implements TarefaService {
 	}
 
 	@Override
-    public void imcrementaPomodoro(String usuario, UUID idTarefa) {
-        log.info("[inicia] - TarefaApplicationService - imcrementaPomodoro");
-        Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
-        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-        tarefa.incrementaPomodoro(usuarioPorEmail);
-        tarefaRepository.salva(tarefa);
-        tarefaRepository.processaStatusEContadorPomodoro(usuarioPorEmail);
-        log.info("[finaliza] - TarefaApplicationService - imcrementaPomodoro");
-    }
+	public void imcrementaPomodoro(String usuario, UUID idTarefa) {
+		log.info("[inicia] - TarefaApplicationService - imcrementaPomodoro");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		tarefa.incrementaPomodoro(usuarioPorEmail);
+		tarefaRepository.salva(tarefa);
+		tarefaRepository.processaStatusEContadorPomodoro(usuarioPorEmail);
+		log.info("[finaliza] - TarefaApplicationService - imcrementaPomodoro");
+	}
+
 	@Override
 	public void ativaTarefa(String usuario, UUID idTarefa) {
 		log.info("[inicia] TarefaApplicationService - ativaTarefa");

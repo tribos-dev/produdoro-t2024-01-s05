@@ -93,8 +93,8 @@ public class TarefaInfraRepository implements TarefaRepository {
     @Override
     public void processaStatusEContadorPomodoro(Usuario usuarioPorEmail) {
         log.info("[inicia] - TarefaInfraRepository - processaStatusEContadorPomodoro");
-        if(usuarioPorEmail.getStatus().equals(StatusUsuario.FOCO)){
-            if (this.contagemPomodoroPausaCurta < 3){
+        if (usuarioPorEmail.getStatus().equals(StatusUsuario.FOCO)) {
+            if (this.contagemPomodoroPausaCurta < 3) {
                 usuarioPorEmail.mudaStatusPausaCurta();
             } else {
                 usuarioPorEmail.mudaStatusParaPausaLonga();
