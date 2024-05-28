@@ -29,7 +29,7 @@ public class TarefaListResponse {
 		this.idProjeto = tarefa.getIdProjeto();
 		this.status = tarefa.getStatus();
 		this.statusAtivacao = tarefa.getStatusAtivacao();
-		this.contagemPomodoro = 1;
+		this.contagemPomodoro = tarefa.getContagemPomodoro();
 		this.posicao = tarefa.getPosicao();
 	}
 	
