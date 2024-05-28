@@ -6,7 +6,13 @@ import dev.wakandaacademy.produdoro.usuario.application.api.UsuarioNovoRequest;
 import java.util.UUID;
 
 public interface UsuarioService {
-	UsuarioCriadoResponse criaNovoUsuario(UsuarioNovoRequest usuarioNovo);
+    UsuarioCriadoResponse criaNovoUsuario(UsuarioNovoRequest usuarioNovo);
+
     UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario);
 
+    void mudaStatusParaPausaCurta(UUID idUsuario, String usuarioEmail);
+
+    void mudaStatusParaFoco(String usuario, UUID idUsuario);
+
+    void mudaParaPausaLonga(String usuario, UUID idUsuario);
 }
